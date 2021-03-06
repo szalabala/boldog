@@ -13,10 +13,11 @@
 //        , start_message: "<span style=\"color:blue;text-decoration:blink;\">" + "lovas" + "</span>"
 //        , restart_message: "<span style=\"color:blue;text-decoration:blink;\">Kattints a Puffinra az újrakezdéshez</span>"
 //        , tabla: "kincsaminincs-terkep1000d.jpg", tabla0: "images/nincs2header_46d.jpg", tabla_end: "ending.jpg"
-//        , tabla_w:"images/nincs2back_w.jpg", tabla_h:"images/nincs2back_h.jpg"
+//        , tabla_w:"", tabla_h:""
 //        , music: "audio/movin-cruisin-xylo.mp3", music0: "audio/movin-crusin-cover1.mp3"
         , figure_scale: 15 // % of table-height, cc 15vh
         , image: { doorClosed: 'images/door3a.png', doorOpen: 'images/door3b.png', empty:"data:,", 
+            tabla_w:"", tabla_h:"",
             path:"images", prefix: "" }
         , misc: { demo1: 'd1', demo2: 'd2' }
         , modes: [
@@ -55,12 +56,32 @@
         bestTime: []
     };
     var gameUI = {
-        mainAreaWidthPc: 80, mainAreaHeightPc: 90, // figureSizePc: 10,
-        cardBackImg: "images/back.jpg",
-        zoomedPosPc: 25, spinTimeMs:hbgui._shortMs, spinDeg:360,
+        //mainAreaWidthPc: 80, mainAreaHeightPc: 90, // figureSizePc: 10,
+        zoomedPosPc: 35, //spinTimeMs:hbgui._shortMs, spinDeg:360,
         fullscr: 0, muted: false,
-        cache: { imgSizePx: 100, offsetXPx:1, offsetYPx:1 }
+        //cache: { imgSizePx: 100, offsetXPx:1, offsetYPx:1 }
     };
+
+    hbgui.getPosPcOfSpecial = function (id) {
+        var pos = { x_pc:gameUI.zoomedPosPc, y_pc:50, z:10, scale: hbgui.zoomOutScale, rotX: hbgui.spinDeg };
+        if (id == "selectA") { // || id == gameData.selectA) {
+            ;
+        } else  if (id == "selectB") { //} || id == gameData.selectB ) {
+            pos.x_pc = 100 - pos.x_pc;  // invert X
+        } else {
+            var pos = hbgui.getPosPcOfPosId(id);
+            pos.rotX = hbgui.spinDeg;
+            pos.scale = hbgui.zoomOutScale;
+        }
+
+        if (gameDesc.W < gameDesc.H) {  // rotate 90, aka swap x - y
+            const tmp = pos.x_pc;
+            pos.x_pc = pos.y_pc;
+            pos.y_pc = tmp;
+        }
+        return pos;
+    }
+
 
     function myLoad() {
         const queryString = window.location.search;
@@ -70,13 +91,13 @@
 
             const urlParams = new URLSearchParams(queryString);
             if (urlParams.has('fast')) {
-                _longMs = 100;
-                _shortMs = 50;
-                gameUI.spinTimeMs = 50;
+                hbgui._longMs = 200;
+                hbgui._shortMs = 100;
+                hbgui.spinTimeMs = 100;
             }
 
             if (urlParams.has('frameMs')) {
-                frameMs = parseInt(urlParams.get('frameMs'))
+                hbgui.frameMs = parseInt(urlParams.get('frameMs'))
             }
             if (urlParams.has('lvl')) {
                 var lvl = parseInt(urlParams.get('lvl'));
@@ -89,22 +110,37 @@
     }
 
     function startOnce() {
-        console.log(` startOnce..`);
+        console.log(` startOnce.. modes.len:${gameDesc.modes.length}`);
+        //if ()
         for (var i=1;i <= gameDesc.modes.length; i++ ) {
             addImgButton(i, 'selectModeDiv', i, '');
         }
-        addImage(gameDesc.misc.demo1, gameDesc.image.imgEmpty);
-        addImage(gameDesc.misc.demo2, gameDesc.image.imgEmpty);
+        addCard(gameDesc.misc.demo1, gameDesc.image.cardBackImg, 'toptable'); // image.imgEmpty
+        addCard(gameDesc.misc.demo2, gameDesc.image.cardBackImg, 'toptable');
         document.getElementById(gameDesc.misc.demo1).style.display = 'none';
         document.getElementById(gameDesc.misc.demo2).style.display = 'none';
-        document.getElementById('tabla').src = gameDesc.image.tabla_W;
-        document.getElementById('tabla').style.filter = 'invert(25%)';
+        if (gameDesc.image.tabla_w) {
+            document.getElementById('tabla').src = gameDesc.image.tabla_w;
+            document.getElementById('tabla').style.filter = 'invert(25%)';
+        }
         if (document.getElementById('myaudio')) {
             document.getElementById('myaudio').volume = 0.2;
         }
+        document.getElementById('btnAbout').src = gameDesc.image.cardBackImg;
         restoreCookies();
         myLoad();
-        start();
+        if (startOnce2) {
+            startOnce2();
+        }
+        console
+        if (gameDesc.modes.length == 1) {
+            document.getElementById('selectModeDiv').style.display = 'none';
+            setTimeout(hbgui.myResize, 10);  // do initial re-placement
+            //selectMode(1);
+            setTimeout(selectMode, 20, 1);
+        } else {
+            start();
+        }
     }
     
     function start() {
@@ -166,15 +202,17 @@
     }
 
     function selectMode(n=1) {
-        console.log(` selectMode.. n:${gameData.gameModeIdx} ${gameData.numStart} ${n} ${n} `);
+        //console.log(` selectMode.. n:${n} idx:${gameData.gameModeIdx} ${gameData.numStart}  start:${gameData.numStart} `);
+        //console.log(`?? ${(gameData.numStart > 1)} && ${(n == 1 || cookies.finished[n-2] > 0)}`)
 
-        if (gameData.numStart > 1 && (n == 1 || cookies.finished[n-2] > 0)) {
+        //if (gameData.numStart > 1 && (n == 1 || cookies.finished[n-2] > 0)) {
+        if (n == 1 || cookies.finished[n-2] > 0) {
             gameData.gameModeIdx = n - 1;
             for (var i=1;i <= gameDesc.modes-length; i++ ) {
                 document.getElementById(`b${i}`).style.display = 'none';
             }
             showSelectedMode(gameData.gameModeIdx);
-            setTimeout(restartGame,  _longMs + gameUI.spinTimeMs);
+            setTimeout(restartGame,  hbgui._longMs + hbgui.spinTimeMs);
         } else {
             document.getElementById(`b${n}`).style.animation=`closed ${_shortMs}ms ease 0s 1 normal both`;
             setTimeout(hbgui.myBlink, _shortMs, document.getElementById(`b${n}`), false )
@@ -182,7 +220,7 @@
     }
 
     function showSelectedMode(n) {
-        console.log(` showSelectMode.. n:${n} ${gameDesc.modes[gameData.gameModeIdx].match} ${n} ${n} `);
+        //console.log(` showSelectMode.. n:${n} ${gameDesc.modes[gameData.gameModeIdx].match} ${n} ${n} `);
         var d1 = document.getElementById(gameDesc.misc.demo1);
         var d2 = document.getElementById(gameDesc.misc.demo2);
 
@@ -190,7 +228,7 @@
         var mode = gameDesc.modes[gameData.gameModeIdx];
         var num = mode.pairs[Math.floor(Math.random() * mode.pairs.length)];
 
-        console.log(` showSelectMode.. mode:${mode.match} ${n} ${n} `);
+        //console.log(` showSelectMode.. mode:${mode.match} ${n} ${n} `);
         var sn1 = (mode.match == '-') ? '' : mode.match.charAt(0);
         var sn2 = (mode.match == '-') ? '' : mode.match.charAt(1);
         d1.src = `${gameDesc.image.path}/${gameDesc.image.prefix}${num}${sn1}.jpg`;
@@ -200,17 +238,20 @@
         
         var pos1 = hbgui.getPosPxOfPospc(hbgui.getPosPcOfSpecial("selectA"));
         var pos2 = hbgui.getPosPxOfPospc(hbgui.getPosPcOfSpecial("selectB"));
-        d1.style.transition=`transform ${gameUI.spinTimeMs}ms ease-in-out`; // linear ease 
-        d1.style.transform=`translate(${pos1.x}px, ${pos1.y}px) scale(${pos1.scale},${pos1.scale}) rotateX(${pos1.rotX}deg)`; // size:enlarge .. rotate:flip
-        d2.style.transition=`transform ${gameUI.spinTimeMs}ms ease-in-out`; // linear ease 
-        d2.style.transform=`translate(${pos2.x}px, ${pos2.y}px) scale(${pos2.scale},${pos2.scale}) rotateX(${pos2.rotX}deg)`; // size:enlarge .. rotate:flip
+        // console.log(` showSelectMode.. posA:${JSON.stringify(hbgui.getPosPcOfSpecial("selectA"))} posB:${JSON.stringify(pos1)} ${n} `);
+        hbgui.zoomOutPic(gameDesc.misc.demo1, hbgui.getPosPxOfPospc(hbgui.getPosPcOfSpecial("selectA")), false);
+        hbgui.zoomOutPic(gameDesc.misc.demo2, hbgui.getPosPxOfPospc(hbgui.getPosPcOfSpecial("selectB")), false);
+        //d1.style.transition=`transform ${hbgui.spinTimeMs}ms ease-in-out`; // linear ease 
+        //d1.style.transform=`translate(${pos1.x}px, ${pos1.y}px) scale(${pos1.scale},${pos1.scale}) rotateX(${pos1.rotX}deg)`; // size:enlarge .. rotate:flip
+        //d2.style.transition=`transform ${hbgui.spinTimeMs}ms ease-in-out`; // linear ease 
+        //d2.style.transform=`translate(${pos2.x}px, ${pos2.y}px) scale(${pos2.scale},${pos2.scale}) rotateX(${pos2.rotX}deg)`; // size:enlarge .. rotate:flip
 
         setTimeout(function() {
                 d1.style.transform=`translate(${pos1.x}px, ${pos1.y}px)`;
                 d2.style.transform=`translate(${pos2.x}px, ${pos2.y}px)`;
                 d1.style.display='none';
                 d2.style.display='none';
-            }, hbgui._longMs + gameUI.spinTimeMs)
+            }, hbgui._longMs + hbgui.spinTimeMs)
         /*
         d1.style.transition=`transform ${gameUI.spinTimeMs}ms ease-in-out`; // linear ease 
         zoomOutPic(gameDesc.misc.demo1, getPosPxOfPospc(getPosPcOfSpecial("selectA")));
@@ -238,7 +279,7 @@
         }
         shuffle(poslist);
         
-        console.log(`start mode:${mode.name}:${mode.match} ${list} x ${poslist}`);
+        //console.log(`start mode:${mode.name}:${mode.match} ${list} x ${poslist}`);
         for (var i = 0; i < N; i++) {  // add tiles
             var img2sel = (mode.match == 'aa') ? 'a' : 'b';
             var sn1 = (mode.match == '-') ? '' : mode.match.charAt(0);
@@ -249,11 +290,13 @@
         gameData.foundPairs = [];
         gameData.totalPairs = N;
         
+        removeAllCards();
         for (var i = 0; i < 2*N; i++) {
-            addImage(gameData.targetList[i].id, gameDesc.image.cardBackImg);// gameData.targetList[i].src);
+            addCard(gameData.targetList[i].id, gameDesc.image.cardBackImg);// gameData.targetList[i].src);
         }
         setTimeout(hbgui.myResize, 10);  // initial placement
 
+        document.getElementById('selectModeDiv').style.display = 'none';
         hbgui.setMsg("", "bigtext");
         hbwega.extendArray(cookies.started, gameData.gameModeIdx, 0);
         cookies.started[gameData.gameModeIdx] += 1;
@@ -262,19 +305,28 @@
         gameData.state = 'wait4first'
     }
 
+    gameData.getGameStatusMsg = function() {
+        return `${gameData.attempts}. lépés`;
+    }
+
     function onClickPic(id) {
-        console.log(`click ${id} ${gameData.state}`);
+        //console.log(`click ${id} ${gameData.state}`);
         if (gameData.state == 'wait4first') {
             gameData.attempts += 1;
             gameData.selectA = id;
             gameData.state = "wait4second";
             gameData.isPairFound = false;
-            hbgui.setStatusMsg(`${gameData.attempts}. lépés`);
+            if (gameData.getGameStatusMsg) {
+                hbgui.setStatusMsg(gameData.getGameStatusMsg());
+            }
+            //console.log(` zo.. posA:${JSON.stringify(hbgui.getPosPcOfSpecial("selectA"))} `);
+            //hbgui.zoomOutPic(id, hbgui.getPosPxOfPospc(hbgui.getPosPcOfPicId(id)));
             hbgui.zoomOutPic(id, hbgui.getPosPxOfPospc(hbgui.getPosPcOfSpecial("selectA")));
         } else if (gameData.state == 'wait4second' && id != gameData.selectA) {
             gameData.selectB = id;
             gameData.state = "wait4first";     // "evaluate";
             gameData.state = "evaluate";
+            //hbgui.zoomOutPic(id, hbgui.getPosPxOfPospc(hbgui.getPosPcOfPicId(id)));
             hbgui.zoomOutPic(id, hbgui.getPosPxOfPospc(hbgui.getPosPcOfSpecial("selectB")));
             setTimeout(evaluateSelection(), hbgui._longMs * 2);
         //} else {
@@ -347,14 +399,18 @@
         gameData.selectB = 0;
         for (var i = 0; i < gameData.targetList.length; i++) {
             var pic = document.getElementById(gameData.targetList[i].id);
+            const item = gameData.targetList.find(element => element.id == gameData.targetList[i].id);     // for url:end cheat only
+            hbgui.swapPicImage(gameData.targetList[i].id, item.src);                                       // cheat
+
             var pos = hbgui.getPosPxOfPospc(hbgui.getEndingPosPcOf(gameData.targetList[i].posid)); // i vs gameData.targetList[i].posid
-            pic.style.transition=`transform ${gameUI.spinTimeMs}ms ease-in-out`; // linear ease 
+            pic.style.transition=`transform ${hbgui.spinTimeMs}ms ease-in-out`; // linear ease 
             pic.style.transform=`translate(${pos.x}px, ${pos.y}px) scale(${pos.scale}, ${pos.scale})`; // size:enlarge .. rotate:flip
         }
         
+        document.getElementById('selectModeDiv').style.display = 'inline';
         document.getElementById('selectModeDiv').style.top = '30%';
         hbgui.setMsg(getClosingMsg(), "bigtext");
-        document.getElementById('restartbutton').style.display = 'inline';
+        //document.getElementById('restartbutton').style.display = 'inline';
         
         cookies.finished[gameData.gameModeIdx] += 1;
         hbwega.updateStatMin(cookies.bestMove, gameData.gameModeIdx, gameData.attempts);
@@ -392,7 +448,7 @@
         for (var i = 0; i < gameData.targetList.length; i++) {
             var pic = document.getElementById(gameData.targetList[i].id);
             var pos = hbgui.getPosPxOfPospc(hbgui.getPosPcOfPicIdx(i));
-            pic.style.transition=`transform ${gameUI.spinTimeMs}ms ease-in-out, opacity ${gameUI.spinTimeMs}ms ease-in-out`; // linear ease 
+            pic.style.transition=`transform ${hbgui.spinTimeMs}ms ease-in-out, opacity ${hbgui.spinTimeMs}ms ease-in-out`; // linear ease 
             pic.style.transform=`translate(${pos.x}px, ${pos.y}px) scale(${pos.scale}, ${pos.scale})`; // size:enlarge .. rotate:flip
             pic.style.opacity = 0.6;
         }
@@ -417,8 +473,6 @@
         document.getElementById('tabla').style.display = 'inline';
         if (gameData.state == "menu") {
             document.getElementById('selectModeDiv').style.display = 'inline';
-        //} else if (gameData.state == "closing") {
-        //    document.getElementById('selectModeDiv').style.display = 'inline';
         } else {
             if (gameData.state == "closing") {
                 document.getElementById('selectModeDiv').style.display = 'inline';
@@ -426,19 +480,17 @@
             for (var i = 0; i < gameData.targetList.length; i++) {
                 var pic = document.getElementById(gameData.targetList[i].id);
                 var pos = hbgui.getPosPxOfPospc(hbgui.getPosPcOfPicIdx(i));
-                pic.style.transition=`transform ${gameUI.spinTimeMs}ms ease-in-out, opacity ${gameUI.spinTimeMs}ms ease-in-out`; // linear ease 
+                pic.style.transition=`transform ${hbgui.spinTimeMs}ms ease-in-out, opacity ${hbgui.spinTimeMs}ms ease-in-out`; // linear ease 
                 pic.style.transform=`translate(${pos.x}px, ${pos.y}px) scale(${pos.scale}, ${pos.scale}) rotateX(${pos.rotX}deg)`; // size:enlarge .. rotate:flip
                 pic.style.opacity = 1;
             }
         }
-        document.getElementById('selectModeDiv').style.display = 'inline';
-
-
+        //document.getElementById('selectModeDiv').style.display = 'inline';
     }
 
     // -- some extra utility functions -----
 
-    function addImage(id, isrc, parent='toptable') {
+    function addCard(id, isrc, parentid='cardscontainer') {
         //console.log(` add ${id} of ${isrc}`);
         //<button id="b3" class="xl modebutton" onClick="selectMode(3)">3</button>
         var img = document.createElement('img'); 
@@ -451,7 +503,14 @@
         img.style.border = '2px solid white';
         img.style.zIndex = 1; // 3d
         img.onclick = function() { onClickPic(id); };
-        document.getElementById('toptable').appendChild(img);
+        document.getElementById(parentid).appendChild(img);
+    }
+
+    function removeAllCards(parent='cardscontainer') {
+        const myNode = document.getElementById(parent);
+        while (myNode.firstChild) {
+          myNode.removeChild(myNode.lastChild);
+        }
     }
 
     function addImgButton(idx, parent, text, defstyle) {

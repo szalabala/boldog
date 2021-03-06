@@ -15,7 +15,7 @@ html, body {
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 h2 { font-size:5vmin; } 
-.xl { font-size:10vmin; font-weight: bolder; text-shadow:1px 1px 5px gold, 0 10px 25px white, 0 -10px 25px white; }
+.xl { font-size:10vmin; font-weight: bolder; text-shadow:-5px 5px 5px gold, 0 20px 50px white, 5px -5px 9px red; }
 .big { font-size:5vmin }
 .medium { font-size:4vmin }
 .small { font-size:3vmin }
