@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>Boldog Nőnapot!</title>
+  <meta name="copyright" content="&copy; 2021 Balazs Szalai" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="viewport" content="minimal-ui,width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+  <script type="text/javascript" src="js/hbwega.js"></script>
+  <script type="text/javascript" src="js/hbpairgame.js"></script>
+  <script>
+    gameDesc._name = "Boldog Nőnapot!";
+    //gameDesc._shortMs = 500;
+    //gameDesc._longMs = 1500;
+    gameDesc.W = 6;
+    gameDesc.H = 3;
+    gameDesc.image = { 
+        tabla_w:"flowers/viragback_w.jpg", tabla_h:"flowers/viragback_h.jpg",
+        doorClosed: 'flowers/dc1.jpg', doorOpen: 'flowers/do1.jpg', 
+        cardBackImg: "flowers/virag_back.jpg",
+        imgEmpty:"data:,",
+        path:"flowers", prefix:"virag" };
+    //gameDesc.misc: { demo1: 'd1', demo2: 'd2' }
+    gameDesc.modes = [
+        { id:1, match:'-', n1: 2, good: 8, pairs: [3, 19, 7, 9, 13, 15], name:"Bugsy", desc:"" },
+        { id:2, match:'-', n1: 3, good: 18, pairs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], name:"Zsugabubus", desc:"" },
+        { id:5, match:'ab', n1: 4, good: 40, pairs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], name:"Paragulis", desc:"Golyózott volna a szemed a trükkjeitől." }
+    ];
+    gameDesc.messages = {
+        intro: "Keresd a párját! Kettesével megnézheted a kártyákat.",
+        showMode: "Keresd a párokat!",
+        eval_good: [ "Fantasztikus! Egyszerűen hihetetlen."  ],
+        eval_bad: [ "A te tudatalattid különleges tipikussággal jelentkezik.", "Elnézést a késésért, nem találták a cella kukcsát.", 
+        "Plátói? Mi a fenét jelent az, hogy plátói?" ],
+        eval_end: [ "Ha nem akarjuk megkockáztatni, hogy olyanokká váljunk, mint ezek, zabáljuk el gyorsan ezt a pénzt!",
+        
+        "Most, hogy elmeséltem az életem történetét, menj és sétálj egyet." ]
+    };
+    </script>
+</head>
+<body onload="startOnce();" onresize="hbgui.myResize();">
+    <div id="toptable" style="position:absolute;width:100%;height:100%;padding:0;">  <!-- 3D perspective:100px; -->
+        <img id="tabla" class="back" src="data:," style="position:absolute;float:left;left:0;padding:0;text-align:center;vertical-align:top;width:90%;height:90%;max-height:90vh;max-width:90vw;border-radius:35%;z-index:-1;object-fit:contain;object-position:center center;">
+        <div style="position:relative;float:right;width:90%;text-align:right;vertical-align:top;">
+            <p id='volume' style="text-align:right"><img id="bvol" src="images/volume2b.png" style="max-height:5vmin;margin:1vmin" onclick="hbgui.toggleAudio()"><img id='fullscr' src="images/fullscr2a.png" style="max-height:5vmin;margin:1vmin" onclick="hbgui.toggleFullScr()">
+                <br><img src="images/about.png" style="max-height:10vmin" onclick="showAbout()"></p>
+            </div>
+            <div id="selectModeDiv" style="position:fixed;float:left;left:10%;top:10%;width:80%;padding:0;text-align:center;">
+                <p id="bigtext" class="xl" style="text-align:center;font-stretch:semi-condensed">Boldog Nőnapot!</p><br>
+                <button id="restartbutton" class="xl modebutton" style="left:42%;border-color:blue;" onclick="start()"><img src="images/door_key.png" style="max-width:15vw;max-height:15vh"></button>
+            </div>
+            <div id="aboutDiv" class="medium" style="position:fixed;float:left;left:10%;top:20%;width:80%;padding:0;xtext-align:center;display:none;">
+                <button class="big modebutton" style="position:fixed;left:60%;top:50%;" onclick="closeAbout()">
+                    <img src="images/back.jpg" style="border-radius:25%;max-height:50%;max-width:50%;animation: blink1 2000ms infinite;"></button>
+                    <p id="texta" class="medium" style="padding:0;text-align:left;font-stretch:semi-condensed;line-height:1em;">
+                        <h3>Boldog Nőnapot!</h3>
+                        Játék: Szalai Balázs <a href="https://www.buymeacoffee.com/szalabala" target="_blank"><img src="images/bmc-logo-no-background.png" alt="Buy Me A Coffee" style="max-height:1em;vertical-align:bottom;" ></a>, <a rel="license" href="http://www.gnu.org/licenses/gpl-3.0.en.html">GPL v3</a>/<a href="http://www.gnu.hu/gpl.html">hu</a>
+                        <br>Fotók: Markovics Éva, Szalai Balázs
+                        <br>Engine: &copy; Szalai Balázs <a href="https://www.buymeacoffee.com/szalabala" target="_blank"><img src="images/bmc-logo-no-background.png" alt="Buy Me A Coffee" style="max-height: 1em;vertical-align:bottom;" ></a>, <a rel="license" href="http://www.gnu.org/licenses/gpl-3.0.en.html">GPL v3</a>/<a href="http://www.gnu.hu/gpl.html">hu</a>
+                    </p><p class="small">
+                        <br><a href="terms.html" target="_blank">Használati feltételek</a>, <a href="cookies.html" target="_blank">Websütik/Cookies</a>
+                    </p>
+                </div>
+                <cite id="status" class="big" style="position:absolute;float:left;top:0%;text-align:left;"></cite>
+                <div id='footer' style="position:absolute;float:left;left:0%;bottom:0%;width:100%;padding:0;margin:0;text-align:left;font-stretch:semi-condensed;">
+                    <cite id="credit" class="medium" style="position:absolute;float:right;right:0%;bottom:0%;padding:0;margin:0;text-align:right;"><i>&copy; Copyright 2021 szalabala</i></cite>
+                </div>
+            </div>
+            <!-- if you create your a game using this HBWEGA engine, please keep the referene visible in the about with copyright info as below:
+                Engine: &copy; Szalai Balázs <a href="https://www.buymeacoffee.com/szalabala" target="_blank"><img src="images/bmc-logo-no-background.png" alt="Buy Me A Coffee" style="max-height: 1em;vertical-align:bottom;" ></a>, GPL <a href="http://www.gnu.hu/gpl.html">hu</a>/<a href="http://www.gnu.org/licenses/gpl-3.0.en.html">en</a>
+                https://www.buymeacoffee.com/szalabala   images/bmc-logo-no-background.png
+                <audio id="myaudio" src="sounds/nincs2intro.m4a" loop> </audio>   <!-- autoplay -->
+            -->
+    </body>
+</html>
+        
