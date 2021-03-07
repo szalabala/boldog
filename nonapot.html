@@ -27,7 +27,7 @@
     //gameDesc.misc: { demo1: 'd1', demo2: 'd2' }
     gameDesc.modes = [
         //    { id:1, match:'-', n1: 2, good: 8, pairs: [3, 19, 7, 9, 13, 15], name:"Bugsy", desc:"" },
-        { id:1, match:'-', n1: 3, good: 18, pairs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], name:"Zsugabubus", desc:"" },
+        { id:1, match:'-', n1: 3, good: 18, pairs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], name:"Zsugabubus", desc:"" },
     ];
     gameDesc.messages = {
         intro: "Keresd a párját! Kettesével megnézheted a kártyákat.",
@@ -39,6 +39,7 @@
         
         "Most, hogy elmeséltem az életem történetét, menj és sétálj egyet." ]
     };
+    gameDesc.cookiestore = "hbnonap2021";
     hbgui.mainAreaHeightPc = 80;
     hbgui.mainAreaWidthPc = 80;
     function startOnce2() {
@@ -91,12 +92,13 @@
                      rotX: 0 };
        }
     }
-    var names = [ "Éva", "Vica", "Kata", "Katalin", "Veronika", "Linda", "Andi", "Ági", "Kriszta", "Joli", 
+    var names = [ "Zoltán", "Vica", "Kata", "Katalin", "Veronika", "Linda", "Andi", "Ági", "Kriszta", "Joli", 
                   "Erika", "Zsuzsa", "Tünde", "Móni", "Edina", "Ízisz", "Heni", "Ibolya", "Arielle", "Eszter",
                   "Melinda", "Nati", "Szilvi", "Hédi", "Anikó", "Lívia", "Nádja", "Margit", "Laura", "Katinka",
                   "Evelin", "Gabi", "Frida", "Izabella", "Tímea", "Viktória", "Tamara", "Nikolett", "Klára", "Ditte",
                   "Judit", "Kinga", "Edit", "Adél", "Ildikó", "Ivett", "Viola", "Virág", "Nóri", "Orsi",
-                  "Csilla", "Sára", "Kaisa", "Mónika", "Marianna", "Olivera", "Bea", "Adrienne", "Boróka", "Mária" ];
+                  "Csilla", "Sára", "Kaisa", "Mónika", "Marianna", "Olivera", "Bea", "Adrienne", "Boróka", "Mária",
+                  "Éva"];
     function getClosingMsg() {
         var msg = "Boldog Nőnapot!";
         if (gameData.en) {

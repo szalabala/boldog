@@ -414,7 +414,8 @@
         
         cookies.finished[gameData.gameModeIdx] += 1;
         hbwega.updateStatMin(cookies.bestMove, gameData.gameModeIdx, gameData.attempts);
-        hbwega.updateStatMin(cookies.bestTime, gameData.gameModeIdx, Math.floor((gameData.endTime - gameData.startTime)/1000));
+        var xtime = Math.max(1, Math.floor((gameData.endTime - gameData.startTime)/1000));    // to prevent strange negative numbers
+        hbwega.updateStatMin(cookies.bestTime, gameData.gameModeIdx, xtime);
         storeCookies();
     }
 
