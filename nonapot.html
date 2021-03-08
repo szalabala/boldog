@@ -31,7 +31,7 @@
     ];
     gameDesc.messages = {
         intro: "Keresd a párját! Kettesével megnézheted a kártyákat.",
-        showMode: "Keresd a párját!",
+        showMode: "Keresd a párját!", showMode_en: "Find the pairs!",
         eval_good: [ "Fantasztikus! Egyszerűen hihetetlen."  ],
         eval_bad: [ "A te tudatalattid különleges tipikussággal jelentkezik.", "Elnézést a késésért, nem találták a cella kukcsát.", 
         "Plátói? Mi a fenét jelent az, hogy plátói?" ],
@@ -57,6 +57,9 @@
             gameData.en = urlParams.has('en')
             if (urlParams.has('end')) {
                 setTimeout(playClosing, 2 * hbgui._longMs);
+            }
+            if (gameData.en) {
+                gameDesc.messages.showMode = gameDesc.messages.showMode_en;
             }
         }
     }
