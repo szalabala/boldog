@@ -42,16 +42,7 @@
     gameDesc.cookiestore = "hbnonap2021";
     hbgui.mainAreaHeightPc = 80;
     hbgui.mainAreaWidthPc = 80;
-    function startOnce2() {
-        //document.getElementById('tabla').style.display = 'none';
-        document.body.style.backgroundImage = 'url(images/csempe_zold2.jpg)';
-        document.getElementById('tabla').style.filter = 'invert(0)';
-        document.getElementById('b1').style.border = '3px solid yellow';
-        document.getElementById('b1').style.borderRadius = '35%';
-        document.getElementById('b1').style.maxHeight = '10vh';
-        document.getElementById('b1').style.maxWidth = '10vh';
-        hbgui.myBlink(document.getElementById('b1'));
-        
+    function startOnce0() {
         const queryString = window.location.search;
         if (queryString != '') {
             const urlParams = new URLSearchParams(queryString);
@@ -64,6 +55,26 @@
                 gameDesc.messages.showMode = gameDesc.messages.showMode_en;
             }
         }
+
+        if (gameData.xx && Math.floor(parseInt(gameData.xx) / 399) == 24) {
+            gameDesc.image.path = "tools";
+            gameDesc.image.prefix = "m";
+            gameDesc.modes[0].pairs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+            gameDesc.image.cardBackImg = "tools/b1.jpg";
+            gameDesc.image.tabla_w = "";
+            gameDesc.image.tabla_h = "";
+        }
+    }
+    function startOnce2() {
+        //document.getElementById('tabla').style.display = 'none';
+        document.body.style.backgroundImage = 'url(images/csempe_zold2.jpg)';
+        document.getElementById('tabla').style.filter = 'invert(0)';
+        document.getElementById('b1').style.border = '3px solid yellow';
+        document.getElementById('b1').style.borderRadius = '35%';
+        document.getElementById('b1').style.maxHeight = '10vh';
+        document.getElementById('b1').style.maxWidth = '10vh';
+        hbgui.myBlink(document.getElementById('b1'));
+        
     }
     var heartpos18w = [ {x_pc: 30, y_pc: 0 }, {x_pc: 40, y_pc: 0 }, {x_pc: 60, y_pc: 0 }, {x_pc: 70, y_pc: 0 },
                        {x_pc: 20, y_pc: 10 }, {x_pc: 50, y_pc: 10 }, {x_pc: 80, y_pc: 10 },
@@ -103,7 +114,8 @@
                   "Evelin", "Gabi", "Frida", "Izabella", "Tímea", "Viktória", "Tamara", "Nikolett", "Klára", "Ditte",
                   "Judit", "Kinga", "Edit", "Adél", "Ildikó", "Ivett", "Viola", "Virág", "Nóri", "Orsi",
                   "Csilla", "Sára", "Kaisa", "Mónika", "Marianna", "Olivera", "Bea", "Adrienne", "Boróka", "Mária",
-                  "Éva", "Marika", "Andrea"];
+                  "Éva", "Marika", "Andrea", "", "", "", "", "", "", "",
+                  "Gyuri"];
     function getClosingMsg() {
         var msg = "Boldog Névnapot!";
         if (gameData.en) {

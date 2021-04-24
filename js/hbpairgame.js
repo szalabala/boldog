@@ -112,6 +112,11 @@
     function startOnce() {
         console.log(` startOnce.. modes.len:${gameDesc.modes.length}`);
         //if ()
+        restoreCookies();
+        if (startOnce0) {
+            startOnce0();
+        }
+
         for (var i=1;i <= gameDesc.modes.length; i++ ) {
             addImgButton(i, 'selectModeDiv', i, '');
         }
@@ -122,17 +127,17 @@
         if (gameDesc.image.tabla_w) {
             document.getElementById('tabla').src = gameDesc.image.tabla_w;
             document.getElementById('tabla').style.filter = 'invert(25%)';
+        } else {
+            document.getElementById('tabla').style.display = 'none';
         }
         if (document.getElementById('myaudio')) {
             document.getElementById('myaudio').volume = 0.2;
         }
         document.getElementById('btnAbout').src = gameDesc.image.cardBackImg;
-        restoreCookies();
         myLoad();
         if (startOnce2) {
             startOnce2();
         }
-        console
         if (gameDesc.modes.length == 1) {
             document.getElementById('selectModeDiv').style.display = 'none';
             setTimeout(hbgui.myResize, 10);  // do initial re-placement
