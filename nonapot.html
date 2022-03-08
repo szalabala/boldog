@@ -42,14 +42,7 @@
     gameDesc.cookiestore = "hbnonap2021";
     hbgui.mainAreaHeightPc = 80;
     hbgui.mainAreaWidthPc = 80;
-    function startOnce2() {
-        document.getElementById('tabla').style.display = 'none';
-        document.getElementById('b1').style.border = '3px solid yellow';
-        document.getElementById('b1').style.borderRadius = '35%';
-        document.getElementById('b1').style.maxHeight = '10vh';
-        document.getElementById('b1').style.maxWidth = '10vh';
-        hbgui.myBlink(document.getElementById('b1'));
-        
+    function startOnce0() {
         const queryString = window.location.search;
         if (queryString != '') {
             const urlParams = new URLSearchParams(queryString);
@@ -62,6 +55,17 @@
                 gameDesc.messages.showMode = gameDesc.messages.showMode_en;
             }
         }
+    }
+    function startOnce2() {
+        //document.getElementById('tabla').style.display = 'none';
+        document.body.style.backgroundImage = 'url(images/csempe_zold2.jpg)';
+        document.getElementById('tabla').style.filter = 'invert(0)';
+        document.getElementById('b1').style.border = '3px solid yellow';
+        document.getElementById('b1').style.borderRadius = '35%';
+        document.getElementById('b1').style.maxHeight = '10vh';
+        document.getElementById('b1').style.maxWidth = '10vh';
+        hbgui.myBlink(document.getElementById('b1'));
+        
     }
     var heartpos18w = [ {x_pc: 30, y_pc: 0 }, {x_pc: 40, y_pc: 0 }, {x_pc: 60, y_pc: 0 }, {x_pc: 70, y_pc: 0 },
                        {x_pc: 20, y_pc: 10 }, {x_pc: 50, y_pc: 10 }, {x_pc: 80, y_pc: 10 },
