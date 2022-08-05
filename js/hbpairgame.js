@@ -63,11 +63,12 @@
     };
 
     hbgui.getPosPcOfSpecial = function (id) {
-        var pos = { x_pc:gameUI.zoomedPosPc, y_pc:50, z:10, scale: hbgui.zoomOutScale, rotX: hbgui.spinDeg };
+        var pos = { x_pc:gameUI.zoomedPosPc, y_pc:50, z:20, scale: hbgui.zoomOutScale, rotX: hbgui.spinDeg };
         if (id == "selectA") { // || id == gameData.selectA) {
             ;
         } else  if (id == "selectB") { //} || id == gameData.selectB ) {
             pos.x_pc = 100 - pos.x_pc;  // invert X
+            pos.z = 40
         } else {
             var pos = hbgui.getPosPcOfPosId(id);
             pos.rotX = hbgui.spinDeg;

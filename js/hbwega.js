@@ -57,14 +57,15 @@ var hbgui = {
         var pic = document.getElementById(id);
         pic.style.zIndex = pos.z;
         pic.style.transition=`transform ${hbgui.spinTimeMs}ms ease-in-out`; // linear ease 
-        pic.style.transform=`translate(${pos.x}px, ${pos.y}px) scale(${pos.scale},${pos.scale}) rotateX(${pos.rotX}deg)`; // size:enlarge .. rotate:flip
+        pic.style.transform=`translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px) scale(${pos.scale},${pos.scale}) rotateX(${pos.rotX}deg)`; // size:enlarge .. rotate:flip
+        // lovas 2*pos.z ??
         if (isSwap) {
             const item = gameData.targetList.find(element => element.id == id);
             setTimeout(this.swapPicImage, Math.floor(hbgui.spinTimeMs / 2), id, item.src);
         }
         setTimeout(this.resetPicTransition, hbgui.spinTimeMs, id);
     },
-    
+
     zoomInPic: function(id, pos) {
         var pic = document.getElementById(id);
         const item = gameData.targetList.find(element => element.id == id);
@@ -73,8 +74,7 @@ var hbgui = {
         }
 
         pic.style.transition=`transform ${hbgui.spinTimeMs}ms ease-in-out`; // linear ease 
-        pic.style.transform=`translate(${pos.x}px, ${pos.y}px) scale(1,1) rotateX(0deg)`; // size:enlarge .. rotate:flip
-        //pic.style.transform=`translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px) scale(1,1) rotateX(0deg)`; // size:enlarge .. rotate:flip
+        pic.style.transform=`translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px) scale(1,1) rotateX(0deg)`; // size:enlarge .. rotate:flip
         if (false == gameData.isPairFound) {
             setTimeout(this.swapPicImage, Math.floor(hbgui.spinTimeMs / 2), id);
         }
@@ -86,7 +86,7 @@ var hbgui = {
         const item = gameData.targetList.find(element => element.id == id);
         var pos = this.getPosPxOfPospc(this.getPosPcOfPic(item));
         pic.style.transition=`transform ${hbgui.spinTimeMs}ms ease-in-out`; // linear ease 
-        pic.style.transform=`translate(${pos.x}px, ${pos.y}px)`;
+        pic.style.transform=`translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px)`;
         setTimeout(this.resetPicZindex, hbgui.spinTimeMs, id, this);
     },
     
@@ -266,7 +266,7 @@ var hbgui = {
             img.style.transition=''; // instant
             img.style.maxWidth = hbgui.cache.imgSizePx + 'px';    // instead of 'width' to keep ratio
             img.style.maxHeight = hbgui.cache.imgSizePx + 'px';
-            img.style.transform=`translate(${pos.x}px, ${pos.y}px) scale(${pospc.scale}, ${pospc.scale}) rotateX(${pospc.rotX}deg)`; // size:enlarge .. rotate:flip
+            img.style.transform=`translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px) scale(${pospc.scale}, ${pospc.scale}) rotateX(${pospc.rotX}deg)`; // size:enlarge .. rotate:flip
             //  rotateX(${pospc.rotX}deg)
             //console.log(`  res ${i} ${gameData.targetList[i].id} ${img.style.left} ${img.style.top}` );
         }
